@@ -20,17 +20,20 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
   const availableProducts = products.filter((product) => product.stock > 0);
 
   const addToCart = (productId) => {
-    const productToAdd = availableProducts.find((product) => product.id === productId);
-  
+    const productToAdd = products.find((product) => product.id === productId);
     if (productToAdd && productToAdd.stock > 0) {
       const existingCartItem = cart.find((item) => item.id === productId);
-  
+
       if (existingCartItem) {
+        // If the product is already in the cart, just update the quantity
         const updatedCart = cart.map((item) =>
-          item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === productId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         );
         setCart(updatedCart);
       } else {
+        // If the product is not in the cart, add it with quantity 1
         const updatedCart = [
           ...cart,
           {
@@ -41,11 +44,11 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
         ];
         setCart(updatedCart);
       }
-  
+
       setCartId(cartId + 1);
-      updateProductQuantity(productId, -1); // Update stock only if the product is added to the cart
+      updateTotal(cart);
     } else {
-      alert('This product is out of stock or the stock is insufficient.');
+      alert('This product is out of stock.');
     }
   };
   

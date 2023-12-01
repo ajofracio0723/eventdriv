@@ -1,5 +1,5 @@
 import React from 'react';
-import iphone15 from './images/iphone15.jpg'
+
 
 
 const Stock_List = ({ products }) => {
