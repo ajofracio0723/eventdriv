@@ -9,7 +9,7 @@ import TransactionReport from './components/TransactionReport';
 import Category_List from './components/Category_List';
 import './App.css';
 import { Button } from 'react-bootstrap';
-import iphone15 from './images/iphone15.jpg'
+
 
 
 
@@ -99,8 +99,6 @@ const App = () => {
       setProducts(updatedProducts);
     }
   };
-
-
 
   return (
     <div>

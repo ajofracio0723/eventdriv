@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import iphone15 from './images/iphone15.jpg'
-
-
 
 const Product_List = ({ products, categories, onUpdate, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
@@ -13,6 +10,7 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
     price: '',
     stock: '',
     category: '',
+    image: '', // Add the 'image' property
   });
 
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -42,20 +40,26 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setEditProduct('');
+    setEditProduct({
+      id: '',
+      name: '',
+      price: '',
+      stock: '',
+      category: '',
+      image: '', // Clear the image after closing the modal
+    });
   };
-
 
   const formSubmit = (e) => {
     e.preventDefault();
-  
-    const { name, price, stock, category } = editProduct;
-  
-    if (!(name && price && stock && category)) {
+
+    const { name, price, stock, category, image } = editProduct;
+
+    if (!(name && price && stock && category && image)) {
       setShowAlert(true);
       return;
     }
-  
+
     onUpdate(editProduct, setEditProduct);
     handleCloseModal();
     setEditProduct({
@@ -64,13 +68,10 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
       price: '',
       stock: '',
       category: '',
+      image: '', // Clear the image after submission
     });
     setShowAlert(false);
-    setTimeout(() => {
-      setShowModal(false);
-    }, 500);
   };
-  
 
   return (
     <div>
@@ -107,8 +108,8 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
         </select>
       </div>
 
-      <table class='table' striped bordered hover>
-        <thead class='thead-dark'>
+      <table className='table' striped bordered hover>
+        <thead className='thead-dark'>
           <tr>
             <th>Product ID</th>
             <th>Name</th>
@@ -128,16 +129,15 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
               <td>{product.stock}</td>
               <td>{product.category}</td>
               <td>
-                      {/* Display the image */}
-                      {product.image && (
-                        <img
-                          src={iphone15}  // Use the 'iphone15' variable directly
-                          alt={product.name}
-                          style={{ maxWidth: '100px', maxHeight: '100px' }}
-                        />
-                      )}
-                    </td>
-              
+                {/* Display the image */}
+                {product.image && (
+                  <img
+                    src={product.image} // Use the 'image' property directly
+                    alt={product.name}
+                    style={{ maxWidth: '100px', maxHeight: '100px' }}
+                  />
+                )}
+              </td>
               <td>
                 <button onClick={() => handleShowModal(product)}>Edit</button>
                 <button onClick={() => onDelete(product.id)}>Delete</button>
@@ -149,53 +149,62 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
 
       {editProduct.id && (
         <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Update Product</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form onSubmit={formSubmit}>
-            <label>Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={editProduct.name}
-              onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })}
-              required
-            />
+          <Modal.Header closeButton>
+            <Modal.Title>Update Product</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <form onSubmit={formSubmit}>
+              <label>Name:</label>
+              <input
+                type="text"
+                name="name"
+                value={editProduct.name}
+                onChange={(e) => setEditProduct({ ...editProduct, name: e.target.value })}
+                required
+              />
 
-            <label>Price:</label>
-            <input
-              type="number"
-              name="price"
-              value={editProduct.price}
-              onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })}
-              required
-            />
+              <label>Price:</label>
+              <input
+                type="number"
+                name="price"
+                value={editProduct.price}
+                onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })}
+                required
+              />
 
-            <label>Category:</label>
-            <select
-              name="category"
-              value={editProduct.category}
-              onChange={(e) => setEditProduct({ ...editProduct, category: e.target.value })}
-              required
-            >
-              <option value="" disabled>Select Category</option>
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
+              <label>Category:</label>
+              <select
+                name="category"
+                value={editProduct.category}
+                onChange={(e) => setEditProduct({ ...editProduct, category: e.target.value })}
+                required
+              >
+                <option value="" disabled>Select Category</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
 
-            <button type="button" onClick={formSubmit}>
-              Update Product
-            </button>
-          </form>
-          {showAlert && (
-            <div className=" alert text-danger" role="alert">
-              Please fill in all fields before updating.
-            </div>
-          )}
+              <label>Image:</label>
+              <input
+                type="text"
+                name="image"
+                value={editProduct.image}
+                onChange={(e) => setEditProduct({ ...editProduct, image: e.target.value })}
+                required
+              />
+
+              <button type="button" onClick={formSubmit}>
+                Update Product
+              </button>
+            </form>
+            {showAlert && (
+              <div className=" alert text-danger" role="alert">
+                Please fill in all fields before updating.
+              </div>
+            )}
           </Modal.Body>
         </Modal>
       )}
@@ -204,5 +213,3 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
 };
 
 export default Product_List;
-
-

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
-import iphone15 from './images/iphone15.jpg';
+
 
 const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted }) => {
   const [cart, setCart] = useState([]);
@@ -20,11 +20,11 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
   const availableProducts = products.filter((product) => product.stock > 0);
 
   const addToCart = (productId) => {
-    const productToAdd = products.find((product) => product.id === productId);
-
+    const productToAdd = availableProducts.find((product) => product.id === productId);
+  
     if (productToAdd && productToAdd.stock > 0) {
       const existingCartItem = cart.find((item) => item.id === productId);
-
+  
       if (existingCartItem) {
         const updatedCart = cart.map((item) =>
           item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
@@ -41,14 +41,14 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
         ];
         setCart(updatedCart);
       }
-
+  
       setCartId(cartId + 1);
-      updateProductQuantity(productId, -1);
+      updateProductQuantity(productId, -1); // Update stock only if the product is added to the cart
     } else {
-      alert('This product is out of stock.');
+      alert('This product is out of stock or the stock is insufficient.');
     }
   };
-
+  
   const removeFromCart = (cartIdToRemove) => {
     const updatedCart = cart.filter((product) => product.cartId !== cartIdToRemove);
     setCart(updatedCart);
@@ -68,11 +68,13 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
 
   const updateProductQuantity = (productId, quantityChange) => {
     const updatedProducts = products.map((product) =>
-      product.id === productId ? { ...product, stock: product.stock + quantityChange } : product
+      product.id === productId
+        ? { ...product, stock: Math.max(product.stock + quantityChange, 0) }
+        : product
     );
+  
     setProducts(updatedProducts);
   };
-
   const handleCheckout = () => {
     if (cart.length === 0) {
       alert('Please add products to the cart before checking out!');
@@ -278,15 +280,15 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                   <td>₱{product.price.toLocaleString()}</td>
                   <td>{product.stock}</td>
                   <td>
-                      {/* Display the image */}
-                      {product.image && (
-                        <img
-                          src={iphone15}  // Use the 'iphone15' variable directly
-                          alt={product.name}
-                          style={{ maxWidth: '100px', maxHeight: '100px' }}
-                        />
-                      )}
-                    </td>
+                {/* Display the image */}
+                {product.image && (
+                  <img
+                    src={product.image} // Use the 'image' property directly
+                    alt={product.name}
+                    style={{ maxWidth: '100px', maxHeight: '100px' }}
+                  />
+                )}
+              </td>
                     <td>
                     <button onClick={() => addToCart(product.id)}>Add to Cart</button>
                   </td>
@@ -296,7 +298,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
           </table>
         </div>
         <h5>Cart</h5>
-        <table className='table'>
+         <table className='table'>
           <thead className='thead-dark'>
             <tr>
               <th>Product</th>
@@ -313,15 +315,15 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                 <td>₱{product.price.toLocaleString()}</td>
                 <td>{product.quantity}</td>
                 <td>
-                      {/* Display the image */}
-                      {product.image && (
-                        <img
-                          src={iphone15}  // Use the 'iphone15' variable directly
-                          alt={product.name}
-                          style={{ maxWidth: '100px', maxHeight: '100px' }}
-                        />
-                      )}
-                    </td>
+                {/* Display the image */}
+                {product.image && (
+                  <img
+                    src={product.image} // Use the 'image' property directly
+                    alt={product.name}
+                    style={{ maxWidth: '100px', maxHeight: '100px' }}
+                  />
+                )}
+              </td>
               
                 <td>
                   <button onClick={() => removeFromCart(product.cartId)}>Remove</button>

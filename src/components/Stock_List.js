@@ -20,15 +20,15 @@ const Stock_List = ({ products }) => {
               <td>{product.name}</td>
               <td>{product.stock}</td>
               <td>
-                      {/* Display the image */}
-                      {product.image && (
-                        <img
-                          src={iphone15}  // Use the 'iphone15' variable directly
-                          alt={product.name}
-                          style={{ maxWidth: '100px', maxHeight: '100px' }}
-                        />
-                      )}
-                    </td>
+                {/* Display the image */}
+                {product.image && (
+                  <img
+                    src={product.image} // Use the 'image' property directly
+                    alt={product.name}
+                    style={{ maxWidth: '100px', maxHeight: '100px' }}
+                  />
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
