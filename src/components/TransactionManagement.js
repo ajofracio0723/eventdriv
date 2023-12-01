@@ -43,7 +43,6 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
       }
 
       setCartId(cartId + 1);
-      // No need to call updateTotal here
       updateProductQuantity(productId, -1);
     } else {
       alert('This product is out of stock.');
@@ -57,7 +56,6 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
     if (removedProduct) {
       updateProductQuantity(removedProduct.id, 1);
     }
-    // No need to call updateTotal here
   };
 
   const updateTotal = (updatedCart) => {
@@ -84,7 +82,6 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
   };
 
   useEffect(() => {
-    // Call updateTotal when cart changes
     updateTotal(cart);
   }, [cart]);
 
@@ -189,7 +186,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
         {PaymentOptions && (
           <div>
             <h3>Payment Options</h3>
-            <p>Total: ₱{total}</p>
+            <p>Total: ₱{total.toLocaleString()}</p>
             <div>
               <h4>Choose Payment Method</h4>
               <button onClick={() => handlePaymentSelection('Cash on Delivery')}>Cash on Delivery</button>
@@ -239,9 +236,9 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
         </div>
       )}
 
-      <div id="printContent" style={{ display: 'none' }}>
+<div id="printContent" style={{ display: 'none' }}>
         <h2>Purchase Receipt</h2>
-        <p>Total: ₱{total}</p>
+        <p>Total: ₱{total.toLocaleString()}</p>
         <h3>Products Purchased:</h3>
         <Table>
           <thead>
@@ -254,7 +251,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
             {cart.map(product => (
               <tr key={product.id}>
                 <td>{product.name}</td>
-                <td>₱{product.price}</td>
+                <td>₱{product.price.toLocaleString()}</td>
               </tr>
             ))}
           </tbody>
@@ -263,14 +260,14 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
 
       <div>
         <div>
-          <h3>Products</h3>
-          <table class='table'>
-            <thead class='thead-dark'>
+        <h3>Products</h3>
+          <table className='table'>
+            <thead className='thead-dark'>
               <tr>
                 <th>Product</th>
                 <th>Price</th>
                 <th>Stock</th>
-                <th>Image</th> {}
+                <th>Image</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -278,7 +275,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
               {availableProducts.map(product => (
                 <tr key={product.id}>
                   <td>{product.name}</td>
-                  <td>₱{product.price}</td>
+                  <td>₱{product.price.toLocaleString()}</td>
                   <td>{product.stock}</td>
                   <td>
                       {/* Display the image */}
@@ -299,8 +296,8 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
           </table>
         </div>
         <h5>Cart</h5>
-        <table class='table'>
-          <thead class='thead-dark'>
+        <table className='table'>
+          <thead className='thead-dark'>
             <tr>
               <th>Product</th>
               <th>Price</th>
@@ -313,7 +310,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
             {cart.map(product => (
               <tr key={product.id}>
                 <td>{product.name}</td>
-                <td>₱{product.price}</td>
+                <td>₱{product.price.toLocaleString()}</td>
                 <td>{product.quantity}</td>
                 <td>
                       {/* Display the image */}

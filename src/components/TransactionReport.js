@@ -32,9 +32,9 @@ const TransactionReport = ({ transactions }) => {
               {sortedTransactions.map((transaction, index) => (
                 <tr key={index}>
                   <td>{transaction.name}</td>
-                  <td>₱{transaction.price}</td>
+                  <td>₱{transaction.price.toLocaleString()}</td>
                   <td>{transaction.quantity}</td>
-                  <td>₱{(transaction.quantity * transaction.price).toFixed(2)}</td>
+                  <td>₱{(transaction.quantity * transaction.price).toLocaleString()}</td>
                   <td>{new Date(transaction.date).toLocaleString()}</td>
                 </tr>
               ))}
