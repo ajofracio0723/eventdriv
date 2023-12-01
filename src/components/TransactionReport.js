@@ -24,8 +24,6 @@ const TransactionReport = ({ transactions }) => {
               <th>Price</th>
               <th>Quantity</th>
               <th>Date</th>
-              <th>Image</th>
-              
             </tr>
           </thead>
           <tbody>
