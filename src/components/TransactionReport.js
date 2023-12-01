@@ -17,27 +17,30 @@ const TransactionReport = ({ transactions }) => {
         {sortByCount ? 'Sort by Date' : 'Sort by Transaction Count'}
       </button>
       {sortedTransactions.length > 0 ? (
-        <table className='table'>
-          <thead className='thead-dark'>
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedTransactions.map((transaction, index) => (
-              <tr key={index}>
-                <td>{transaction.name}</td>
-                <td>₱{transaction.price}</td>
-                <td>{transaction.quantity}</td>
-                <td>{new Date(transaction.date).toLocaleString()}</td>
-                
+        <div>
+          <table className='table'>
+            <thead className='thead-dark'>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sortedTransactions.map((transaction, index) => (
+                <tr key={index}>
+                  <td>{transaction.name}</td>
+                  <td>₱{transaction.price}</td>
+                  <td>{transaction.quantity}</td>
+                  <td>₱{(transaction.quantity * transaction.price).toFixed(2)}</td>
+                  <td>{new Date(transaction.date).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <p>No transactions to display.</p>
       )}

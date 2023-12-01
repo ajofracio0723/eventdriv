@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
-import iphone15 from './images/iphone15.jpg'
+import iphone15 from './images/iphone15.jpg';
 
-const TransactionManagement = ({ products = [], setProducts, handleAddToCart, onPaymentCompleted }) => {
+const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted }) => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [transactions, setTransactions] = useState([]);
@@ -14,19 +14,19 @@ const TransactionManagement = ({ products = [], setProducts, handleAddToCart, on
   const [cashOnDeliveryDetails, setCashOnDeliveryDetails] = useState({
     fullName: '',
     CompleteAddress: '',
-    contactNumber: ''
+    contactNumber: '',
   });
 
-  const availableProducts = products.filter(product => product.stock > 0);
+  const availableProducts = products.filter((product) => product.stock > 0);
 
   const addToCart = (productId) => {
-    const productToAdd = products.find(product => product.id === productId);
+    const productToAdd = products.find((product) => product.id === productId);
 
     if (productToAdd && productToAdd.stock > 0) {
-      const existingCartItem = cart.find(item => item.id === productId);
+      const existingCartItem = cart.find((item) => item.id === productId);
 
       if (existingCartItem) {
-        const updatedCart = cart.map(item =>
+        const updatedCart = cart.map((item) =>
           item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
         );
         setCart(updatedCart);
@@ -37,13 +37,13 @@ const TransactionManagement = ({ products = [], setProducts, handleAddToCart, on
             ...productToAdd,
             cartId: cartId,
             quantity: 1,
-          }
+          },
         ];
         setCart(updatedCart);
       }
 
       setCartId(cartId + 1);
-      updateTotal(cart);
+      // No need to call updateTotal here
       updateProductQuantity(productId, -1);
     } else {
       alert('This product is out of stock.');
@@ -51,22 +51,25 @@ const TransactionManagement = ({ products = [], setProducts, handleAddToCart, on
   };
 
   const removeFromCart = (cartIdToRemove) => {
-    const updatedCart = cart.filter(product => product.cartId !== cartIdToRemove);
+    const updatedCart = cart.filter((product) => product.cartId !== cartIdToRemove);
     setCart(updatedCart);
-    const removedProduct = cart.find(product => product.cartId === cartIdToRemove);
+    const removedProduct = cart.find((product) => product.cartId === cartIdToRemove);
     if (removedProduct) {
       updateProductQuantity(removedProduct.id, 1);
     }
-    updateTotal(updatedCart);
+    // No need to call updateTotal here
   };
 
   const updateTotal = (updatedCart) => {
-    const totalPrice = updatedCart.reduce((acc, product) => acc + parseFloat(product.price) * product.quantity, 0);
+    const totalPrice = updatedCart.reduce(
+      (acc, product) => acc + parseFloat(product.price) * product.quantity,
+      0
+    );
     setTotal(totalPrice);
   };
 
   const updateProductQuantity = (productId, quantityChange) => {
-    const updatedProducts = products.map(product =>
+    const updatedProducts = products.map((product) =>
       product.id === productId ? { ...product, stock: product.stock + quantityChange } : product
     );
     setProducts(updatedProducts);
@@ -79,6 +82,11 @@ const TransactionManagement = ({ products = [], setProducts, handleAddToCart, on
       setPaymentOptions(true);
     }
   };
+
+  useEffect(() => {
+    // Call updateTotal when cart changes
+    updateTotal(cart);
+  }, [cart]);
 
   const handlePaymentSelection = (paymentType) => {
     setPaymentOptions(true);
