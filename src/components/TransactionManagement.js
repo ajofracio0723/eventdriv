@@ -61,7 +61,7 @@ const TransactionManagement = ({ products = [], setProducts, handleAddToCart, on
   };
 
   const updateTotal = (updatedCart) => {
-    const totalPrice = updatedCart.reduce((acc, product) => acc + parseFloat(product.price), 0);
+    const totalPrice = updatedCart.reduce((acc, product) => acc + parseFloat(product.price) * product.quantity, 0);
     setTotal(totalPrice);
   };
 
@@ -282,7 +282,7 @@ const TransactionManagement = ({ products = [], setProducts, handleAddToCart, on
                         />
                       )}
                     </td>
-                  <td>
+                    <td>
                     <button onClick={() => addToCart(product.id)}>Add to Cart</button>
                   </td>
                 </tr>
