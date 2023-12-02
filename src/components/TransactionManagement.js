@@ -1,5 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
+import Card from 'react-bootstrap/Card';
+import { Container, Row, Col } from 'react-bootstrap';
+
+const ProductCard = ({ product, addToCart }) => (
+  <Col xs={12} sm={6} md={4} lg={3} className="mb-3" style={{ marginBottom: '20px' }}>
+    <Card style={{ width: '12rem', height: '100%', border: '2px solid #ccc' }}>
+      {product.image && (
+        <Card.Img
+          variant="top"
+          src={product.image}
+          alt={product.name}
+          style={{ height: '100%', objectFit: 'contain' }}
+        />
+      )}
+      <Card.Body style={{ border: '1px solid #ddd', borderTop: 'none' }}>
+        <Card.Title>{product.name}</Card.Title>
+        <Card.Text>
+          <strong>Price:</strong> ₱{product.price.toLocaleString()}<br />
+          <strong>Stock:</strong> {product.stock}
+        </Card.Text>
+        <button onClick={() => addToCart(product.id)}>Add to Cart</button>
+      </Card.Body>
+    </Card>
+  </Col>
+);
+
+
 
 
 const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted }) => {
@@ -60,7 +87,8 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
     setCart(updatedCart);
     const removedProduct = cart.find((product) => product.cartId === cartIdToRemove);
     if (removedProduct) {
-      updateProductQuantity(removedProduct.id, 1);
+      // Update the product quantity in the products array by adding back the removed quantity
+      updateProductQuantity(removedProduct.id, -removedProduct.quantity);
     }
   };
 
@@ -217,6 +245,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
               onChange={(e) =>
                 setCashOnDeliveryDetails({ ...cashOnDeliveryDetails, fullName: e.target.value })
               }
+              disabled={!CashOnDeliverySelected} // Disable the input if not selected
             />
             <input
               type="text"
@@ -228,6 +257,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                   shippingAddress: e.target.value
                 })
               }
+              disabled={!CashOnDeliverySelected} // Disable the input if not selected
             />
             <input
               type="number"
@@ -239,6 +269,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                   contactNumber: e.target.value
                 })
               }
+              disabled={!CashOnDeliverySelected} // Disable the input if not selected
             />
             <button type="submit">Submit</button>
           </form>
@@ -267,79 +298,55 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
         </Table>
       </div>
 
-      <div>
-        <div>
-        <h3>Products</h3>
-          <table className='table'>
-            <thead className='thead-dark'>
-              <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Image</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-             <tbody>
-              {availableProducts.map(product => (
-                <tr key={product.id}>
-                  <td>{product.name}</td>
-                  <td>₱{product.price.toLocaleString()}</td>
-                  <td>{product.stock}</td>
-                  <td>
-                {/* Display the image */}
-                {product.image && (
-                  <img
-                    src={product.image} // Use the 'image' property directly
-                    alt={product.name}
-                    style={{ maxWidth: '100px', maxHeight: '100px' }}
-                  />
-                )}
-              </td>
-                    <td>
-                    <button onClick={() => addToCart(product.id)}>Add to Cart</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div>
+          <Container>
+        <div style={{ marginBottom: '20px' }}>
+          <h3>Products</h3>
+          <Row style={{ margin: '0 -50px' }}>
+          {availableProducts.map((product) => (
+          <ProductCard key={product.id} product={product} addToCart={addToCart} />
+        ))}
+        </Row>
         </div>
-        <h5>Cart</h5>
-         <table className='table'>
-          <thead className='thead-dark'>
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Image</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cart.map(product => (
-              <tr key={product.id}>
-                <td>{product.name}</td>
-                <td>₱{product.price.toLocaleString()}</td>
-                <td>{product.quantity}</td>
-                <td>
-                {/* Display the image */}
-                {product.image && (
-                  <img
-                    src={product.image} // Use the 'image' property directly
-                    alt={product.name}
-                    style={{ maxWidth: '100px', maxHeight: '100px' }}
-                  />
-                )}
-              </td>
-              
-                <td>
-                  <button onClick={() => removeFromCart(product.cartId)}>Remove</button>
-                  <button onClick={handleCheckout}>Checkout</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+  <div>
+    <h5>Cart</h5>
+    <table className='table'>
+      <thead className='thead-dark'>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Image</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {cart.map((product) => (
+          <tr key={product.id}>
+            <td>{product.name}</td>
+            <td>₱{product.price.toLocaleString()}</td>
+            <td>{product.quantity}</td>
+            <td>
+              {/* Display the image */}
+              {product.image && (
+                <img
+                  src={product.image} // Use the 'image' property directly
+                  alt={product.name}
+                  style={{ maxWidth: '100px', maxHeight: '100px' }}
+                />
+              )}
+            </td>
+            <td>
+              <button onClick={() => removeFromCart(product.cartId)}>Remove</button>
+              <button onClick={handleCheckout}>Checkout</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</Container>
       </div>
     </div>
   );

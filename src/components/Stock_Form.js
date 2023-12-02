@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-
-
-const Stock_Form = ({ products, onUpdateStock }) => {
+const Stock_Form = ({ products, onUpdateStock, paymentCompleted }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState('');
   const [newStock, setNewStock] = useState('');
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [canUpdateStock, setCanUpdateStock] = useState(true);
+
+  useEffect(() => {
+    // Reset the canUpdateStock state after completing the payment
+    if (paymentCompleted) {
+      setCanUpdateStock(true);
+    }
+  }, [paymentCompleted]);
 
   const handleShowModal = () => {
     setShowModal(true);
-    setUpdateSuccess(false); 
+    setUpdateSuccess(false);
   };
 
   const handleCloseModal = () => setShowModal(false);
@@ -27,11 +33,11 @@ const Stock_Form = ({ products, onUpdateStock }) => {
   const form_submit = (e) => {
     e.preventDefault();
 
-  const product = products.find((p) => p.id === selectedProduct);
+    const product = products.find((p) => p.id === selectedProduct);
 
     if (product) {
       onUpdateStock(product.id, parseInt(newStock, 10));
-      setUpdateSuccess(true); 
+      setUpdateSuccess(true);
     }
     setSelectedProduct('');
     setNewStock('');
@@ -39,42 +45,59 @@ const Stock_Form = ({ products, onUpdateStock }) => {
       setShowModal(false);
     }, 500);
   };
+
+  const inputElement = canUpdateStock ? (
+    <input
+      type="number"
+      name="newStock"
+      value={newStock}
+      onChange={change_stock}
+    />
+  ) : (
+    <input
+      type="number"
+      name="newStock"
+      value={newStock}
+      onChange={change_stock}
+      disabled
+    />
+  );
+
   return (
     <>
-    
-    <Button onClick={handleShowModal}>Update Stock</Button>
-    <Modal show={showModal} onHide={handleCloseModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>Update Stock</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <form onSubmit={form_submit}>
-          <label>Product:</label>
-          <select value={selectedProduct} onChange={change_product}>
-            <option value="" disabled>Select a product</option>
-            {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.name}
+      <Button onClick={handleShowModal} disabled={!canUpdateStock}>
+        Update Stock
+      </Button>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Stock</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={form_submit}>
+            <label>Product:</label>
+            <select value={selectedProduct} onChange={change_product} disabled={!canUpdateStock}>
+              <option value="" disabled>
+                Select a product
               </option>
-            ))}
-          </select>
+              {products.map((product) => (
+                <option key={product.id} value={product.id}>
+                  {product.name}
+                </option>
+              ))}
+            </select>
 
-          <label>New Stock:</label>
-          <input
-            type="number"
-            name="newStock"
-            value={newStock}
-            onChange={change_stock}
-          />
+            <label>New Stock:</label>
+            {inputElement}
 
-          <Button type="submit">Update Stock</Button>
-          {updateSuccess && <p className="mt-2">Updated successfully!</p>}
-        </form>
-      </Modal.Body>
-    </Modal>
-  </>
-);
-
+            <Button type="submit" disabled={!canUpdateStock}>
+              Update Stock
+            </Button>
+            {updateSuccess && <p className="mt-2">Updated successfully!</p>}
+          </form>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
 };
-export default Stock_Form;
 
+export default Stock_Form;
