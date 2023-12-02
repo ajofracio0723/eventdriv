@@ -62,7 +62,10 @@ const App = () => {
 
   const delete_product = (productId) => {
     const updatedProducts = products.filter((product) => product.id !== productId);
-    setProducts(updatedProducts);
+    const updatedProductsIds = updatedProducts.map((product, index) => {
+      return { ...product, id: `GZMGTZ-${index + 1001}` };
+    });
+    setProducts(updatedProductsIds);
   };
 
   const add_category = (category) => {

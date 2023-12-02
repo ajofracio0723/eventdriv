@@ -20,37 +20,40 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
   const availableProducts = products.filter((product) => product.stock > 0);
 
   const addToCart = (productId) => {
-    const productToAdd = products.find((product) => product.id === productId);
-    if (productToAdd && productToAdd.stock > 0) {
-      const existingCartItem = cart.find((item) => item.id === productId);
+  const productToAdd = products.find((product) => product.id === productId);
+  if (productToAdd && productToAdd.stock > 0) {
+    const existingCartItem = cart.find((item) => item.id === productId);
 
-      if (existingCartItem) {
-        // If the product is already in the cart, just update the quantity
-        const updatedCart = cart.map((item) =>
-          item.id === productId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-        setCart(updatedCart);
-      } else {
-        // If the product is not in the cart, add it with quantity 1
-        const updatedCart = [
-          ...cart,
-          {
-            ...productToAdd,
-            cartId: cartId,
-            quantity: 1,
-          },
-        ];
-        setCart(updatedCart);
-      }
-
-      setCartId(cartId + 1);
-      updateTotal(cart);
+    if (existingCartItem) {
+      // If the product is already in the cart, just update the quantity
+      const updatedCart = cart.map((item) =>
+        item.id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+      setCart(updatedCart);
     } else {
-      alert('This product is out of stock.');
+      // If the product is not in the cart, add it with quantity 1
+      const updatedCart = [
+        ...cart,
+        {
+          ...productToAdd,
+          cartId: cartId,
+          quantity: 1,
+        },
+      ];
+      setCart(updatedCart);
     }
-  };
+
+    // Update the product quantity in the products array by subtracting 1
+    updateProductQuantity(productId, 1);
+
+    setCartId(cartId + 1);
+    updateTotal(cart);
+  } else {
+    alert('This product is out of stock.');
+  }
+};
   
   const removeFromCart = (cartIdToRemove) => {
     const updatedCart = cart.filter((product) => product.cartId !== cartIdToRemove);
@@ -72,13 +75,14 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
   const updateProductQuantity = (productId, quantityChange) => {
     const updatedProducts = products.map((product) =>
       product.id === productId
-        ? { ...product, stock: Math.max(product.stock + quantityChange, 0) }
+        ? { ...product, stock: Math.max(product.stock - quantityChange, 0) }
         : product
     );
   
     setProducts(updatedProducts);
   };
-  const handleCheckout = () => {
+  const handleCheckout = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
     if (cart.length === 0) {
       alert('Please add products to the cart before checking out!');
     } else {
@@ -93,7 +97,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
   const handlePaymentSelection = (paymentType) => {
     setPaymentOptions(true);
     setPaymentMethod(paymentType);
-    setCashOnDeliverySelected(paymentType === 'Cash on Delivery');
+    setCashOnDeliverySelected(PaymentMethod === 'Cash on Delivery');
 
     if (paymentType === 'Pay Online') {
       printPurchaseDetailsOnline();
