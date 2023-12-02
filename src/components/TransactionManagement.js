@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Tab, Nav } from 'react-bootstrap';
+
 
 const ProductCard = ({ product, addToCart }) => (
   <Col xs={12} sm={6} md={4} lg={3} className="mb-3" style={{ marginBottom: '20px' }}>
@@ -216,101 +217,33 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
   };
 
   return (
-    <div>
-      <h4>Product Transaction (Point of Sale)</h4>
-    
-      <div>
-        {PaymentOptions && (
-          <div>
-            <h3>Payment Options</h3>
-            <p>Total: ₱{total.toLocaleString()}</p>
-            <div>
-              <h4>Choose Payment Method</h4>
-              <button onClick={() => handlePaymentSelection('Cash on Delivery')}>Cash on Delivery</button>
-              <button onClick={() => handlePaymentSelection('Pay Online')}>Pay Online</button>
-              <button onClick={handlePaymentCompleted}>Complete Payment</button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {CashOnDeliverySelected && (
-        <div>
-          <h3>Provide Details for Cash on Delivery</h3>
-          <form onSubmit={handleCashOnDeliverySubmit}>
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={cashOnDeliveryDetails.fullName}
-              onChange={(e) =>
-                setCashOnDeliveryDetails({ ...cashOnDeliveryDetails, fullName: e.target.value })
-              }
-              disabled={!CashOnDeliverySelected} // Disable the input if not selected
-            />
-            <input
-              type="text"
-              placeholder="Complete Address"
-              value={cashOnDeliveryDetails.shippingAddress}
-              onChange={(e) =>
-                setCashOnDeliveryDetails({
-                  ...cashOnDeliveryDetails,
-                  shippingAddress: e.target.value
-                })
-              }
-              disabled={!CashOnDeliverySelected} // Disable the input if not selected
-            />
-            <input
-              type="number"
-              placeholder="Contact Number"
-              value={cashOnDeliveryDetails.contactNumber}
-              onChange={(e) =>
-                setCashOnDeliveryDetails({
-                  ...cashOnDeliveryDetails,
-                  contactNumber: e.target.value
-                })
-              }
-              disabled={!CashOnDeliverySelected} // Disable the input if not selected
-            />
-            <button type="submit">Submit</button>
-          </form>
-        </div>
-      )}
-
-<div id="printContent" style={{ display: 'none' }}>
-        <h2>Purchase Receipt</h2>
-        <p>Total: ₱{total.toLocaleString()}</p>
-        <h3>Products Purchased:</h3>
-        <Table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cart.map(product => (
-              <tr key={product.id}>
-                <td>{product.name}</td>
-                <td>₱{product.price.toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-          <div>
-          <Container>
-        <div style={{ marginBottom: '20px' }}>
-          <h1>Products</h1>
-          <Row style={{ margin: '0 -50px' }}>
-          {availableProducts.map((product) => (
-          <ProductCard key={product.id} product={product} addToCart={addToCart} />
-        ))}
-        </Row>
-        </div>
-
+    <Container>
+      <Tab.Container id="tabs" defaultActiveKey="products">
+        <Row>
+          <Col>
+              <Nav variant="tabs" className="mb-3" style={{ fontSize: '20px', padding: '10px' }}>
+              <Nav.Item>
+                <Nav.Link eventKey="products">Products</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="cart">Cart</Nav.Link>
+              </Nav.Item>
+            </Nav>
+            <Tab.Content>
+              <Tab.Pane eventKey="products">
+                <div style={{ marginBottom: '20px' }}>
+                  <h1>Products</h1>
+                  <Row style={{ margin: '0 -50px' }}>
+                    {availableProducts.map((product) => (
+                      <ProductCard key={product.id} product={product} addToCart={addToCart} />
+                    ))}
+                  </Row>
+                </div>
+              </Tab.Pane>
+              <Tab.Pane eventKey="cart">
   <div>
     <h1>Cart</h1>
-    <table className='table'>
+    <table className='table' style={{ margin: 'auto', textAlign: 'center'}}>
       <thead className='thead-dark'>
         <tr>
           <th>Product</th>
@@ -327,10 +260,9 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
             <td>₱{product.price.toLocaleString()}</td>
             <td>{product.quantity}</td>
             <td>
-              {/* Display the image */}
               {product.image && (
                 <img
-                  src={product.image} // Use the 'image' property directly
+                  src={product.image}
                   alt={product.name}
                   style={{ maxWidth: '100px', maxHeight: '100px' }}
                 />
@@ -338,17 +270,111 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
             </td>
             <td>
               <button onClick={() => removeFromCart(product.cartId)}>Remove</button>
-              <button onClick={handleCheckout}>Checkout</button>
             </td>
           </tr>
         ))}
       </tbody>
     </table>
-  </div>
-</Container>
+    
+    {cart.length > 0 && (
+            <div>
+              <div style={{ textAlign: 'center' }}>
+        <Button variant='success' onClick={handleCheckout}>
+          Checkout
+        </Button>
       </div>
-    </div>
+      </div>
+    )}
+  </div>
+   </Tab.Pane> 
+   </Tab.Content>
+    </Col>
+    </Row>
+     </Tab.Container>
+  
+      <div>
+        <div>
+          {PaymentOptions && (
+            <div>
+              <h3>Payment Options</h3>
+              <h4>Product Transaction (Point of Sale)</h4>
+              <p>Total: ₱{total.toLocaleString()}</p>
+              <div>
+                <h4>Choose Payment Method</h4>
+                <button onClick={() => handlePaymentSelection('Cash on Delivery')}>Cash on Delivery</button>
+                <button onClick={() => handlePaymentSelection('Pay Online')}>Pay Online</button>
+                <button onClick={handlePaymentCompleted}>Complete Payment</button>
+              </div>
+            </div>
+          )}
+        </div>
+  
+        {CashOnDeliverySelected && (
+          <div>
+            <h3>Provide Details for Cash on Delivery</h3>
+            <form onSubmit={handleCashOnDeliverySubmit}>
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={cashOnDeliveryDetails.fullName}
+                onChange={(e) =>
+                  setCashOnDeliveryDetails({ ...cashOnDeliveryDetails, fullName: e.target.value })
+                }
+                disabled={!CashOnDeliverySelected}
+              />
+              <input
+                type="text"
+                placeholder="Complete Address"
+                value={cashOnDeliveryDetails.shippingAddress}
+                onChange={(e) =>
+                  setCashOnDeliveryDetails({
+                    ...cashOnDeliveryDetails,
+                    shippingAddress: e.target.value
+                  })
+                }
+                disabled={!CashOnDeliverySelected}
+              />
+              <input
+                type="number"
+                placeholder="Contact Number"
+                value={cashOnDeliveryDetails.contactNumber}
+                onChange={(e) =>
+                  setCashOnDeliveryDetails({
+                    ...cashOnDeliveryDetails,
+                    contactNumber: e.target.value
+                  })
+                }
+                disabled={!CashOnDeliverySelected}
+              />
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+        )}
+        <div id="printContent" style={{ display: 'none' }}>
+          <h2>Purchase Receipt</h2>
+          <p>Total: ₱{total.toLocaleString()}</p>
+          <h3>Products Purchased:</h3>
+          <Table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map(product => (
+                <tr key={product.id}>
+                  <td>{product.name}</td>
+                  <td>₱{product.price.toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      </div>
+    </Container>
   );
-};
-
-export default TransactionManagement;
+  };
+  
+  export default TransactionManagement;
+  

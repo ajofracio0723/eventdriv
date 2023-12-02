@@ -131,32 +131,3 @@ button:hover {
 p {
   margin-top: 15px;
 }
-
-
-
-/* styles.css */
-
-.nav-tabs-custom {
-  background-color: #f8f9fa; /* Set background color */
-  border-radius: 10px; /* Add rounded corners */
-  padding: 13px; /* Add padding */
-}
-
-.nav-link-custom {
-  color: #007bff; /* Set link color */
-  font-weight: bold; /* Make the text bold */
-  font-size: 23px; /* Set font size */
-  margin: 0 15px; /* Add margin between tabs */
-  padding: 20px; /* Add padding to tabs */
-}
-
-.nav-link-custom:hover {
-  color: #0a0c0e; /* Change link color on hover */
-}
-.centered-table td {
-  text-align: center;
-}
-
-
-
-
