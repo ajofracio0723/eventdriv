@@ -46,14 +46,16 @@ const Stock_Form = ({ products, onUpdateStock, paymentCompleted }) => {
     }, 500);
   };
 
-  const inputElement = canUpdateStock ? (
+  const inputElement = (
     <input
       type="number"
       name="newStock"
       value={newStock}
       onChange={change_stock}
+      disabled={!canUpdateStock}
     />
-  ) : (
+  );
+   (
     <input
       type="number"
       name="newStock"

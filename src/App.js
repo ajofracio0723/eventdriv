@@ -9,9 +9,7 @@ import TransactionReport from './components/TransactionReport';
 import Category_List from './components/Category_List';
 import './App.css';
 import { Button } from 'react-bootstrap';
-
-
-
+import Chart from 'chart.js/auto';
 
 const App = () => {
   const [products, setProducts] = useState(() => {
@@ -165,7 +163,7 @@ const App = () => {
         {activeTab === 'reports' && (
           <div>
             <h2>Transaction Report</h2>
-            <TransactionReport transactions={transactions} />
+            <TransactionReport transactions={transactions} products={products} />
           </div>
 )}
       </div>  

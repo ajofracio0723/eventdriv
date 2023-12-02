@@ -5,7 +5,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 const ProductCard = ({ product, addToCart }) => (
   <Col xs={12} sm={6} md={4} lg={3} className="mb-3" style={{ marginBottom: '20px' }}>
-    <Card style={{ width: '12rem', height: '100%', border: '2px solid #ccc' }}>
+    <Card style={{ width: '14rem', height: '100%', border: '2px solid #ccc' }}>
       {product.image && (
         <Card.Img
           variant="top"
@@ -297,11 +297,10 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
           </tbody>
         </Table>
       </div>
-
           <div>
           <Container>
         <div style={{ marginBottom: '20px' }}>
-          <h3>Products</h3>
+          <h1>Products</h1>
           <Row style={{ margin: '0 -50px' }}>
           {availableProducts.map((product) => (
           <ProductCard key={product.id} product={product} addToCart={addToCart} />
@@ -310,7 +309,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
         </div>
 
   <div>
-    <h5>Cart</h5>
+    <h1>Cart</h1>
     <table className='table'>
       <thead className='thead-dark'>
         <tr>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import Sales_Chart from './Sales_Chart';
+import Stock_Level_Chart from './Stock_Level_Chart';
 
-const TransactionReport = ({ transactions }) => {
+const TransactionReport = ({ transactions, products }) => {
   const [sortByCount, setSortByCount] = useState(false);
 
   const sortedTransactions = sortByCount
@@ -17,14 +19,14 @@ const TransactionReport = ({ transactions }) => {
         {sortByCount ? 'Sort by Date' : 'Sort by Transaction Count'}
       </button>
       {sortedTransactions.length > 0 ? (
-        <div>
-          <table className='table'>
+        <div style={{ textAlign: 'center' }}>
+          <table className='table' style={{ margin: 'auto' }}>
             <thead className='thead-dark'>
               <tr>
                 <th>Product</th>
-                <th>Price</th>
+                <th>Amount</th>
                 <th>Quantity</th>
-                <th>Total Price</th>
+                <th>Total amount</th>
                 <th>Date</th>
               </tr>
             </thead>
@@ -44,6 +46,10 @@ const TransactionReport = ({ transactions }) => {
       ) : (
         <p>No transactions to display.</p>
       )}
+      <br /><br />
+      <Sales_Chart transactions={sortedTransactions} />
+      <br />
+      <Stock_Level_Chart products={products} />
     </div>
   );
 };
