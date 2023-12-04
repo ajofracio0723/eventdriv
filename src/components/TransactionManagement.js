@@ -20,10 +20,16 @@ const ProductCard = ({ product, addToCart }) => (
           <strong>Price:</strong> ₱{product.price.toLocaleString()}<br />
           <strong>Stock:</strong> {product.stock}
         </Card.Text>
-        <button onClick={() => addToCart(product.id)}>Add to Cart</button>
+        <Button variant='primary' onClick={() => addToCart(product.id)}>Add to Cart</Button>
       </Card.Body>
     </Card>
   </Col>
+);
+
+const PaymentOptionsContainer = ({ children }) => (
+  <div className="payment-options-container" style={{ border: '1px solid #ddd', padding: '10px', marginBottom: '20px' }}>
+    {children}
+  </div>
 );
 
 const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted }) => {
@@ -289,7 +295,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                   </table>
                   {cart.length > 0 && (
                     <div>
-                      <div style={{ textAlign: 'center' }}>
+                      <div style={{ textAlign: 'center' }}> <br></br>
                         <Button variant='success' onClick={handleCheckout}>
                           Checkout
                         </Button>
@@ -304,9 +310,9 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
       </Tab.Container>
 
       <div>
-        <div>
+        <div>&nbsp;
           {PaymentOptions && selectedTab === "cart" && (
-            <div className="payment-options-container">
+            <PaymentOptionsContainer>
               <h4>Product Transaction (Point of Sale)</h4>
               <p>Total: ₱{total.toLocaleString()}</p>
               <div>
@@ -316,10 +322,10 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                 </Button>&nbsp;
                 <Button variant='success' onClick={() => handlePaymentSelection('Pay Online')}>
                   Pay Online
-                </Button>
+                </Button> &nbsp;
                 <Button variant='success' onClick={handlePaymentCompleted}>Complete Payment</Button>
               </div>
-            </div>
+            </PaymentOptionsContainer>
           )}
         </div>
 

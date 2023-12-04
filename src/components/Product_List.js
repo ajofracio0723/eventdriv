@@ -139,7 +139,7 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
                 )}
               </td>
               <td>
-                <button onClick={() => handleShowModal(product)}>Edit</button> &nbsp;
+                <Button variant='primary' onClick={() => handleShowModal(product)}>Edit</Button> &nbsp;
                 <Button variant='danger' onClick={() => onDelete(product.id)}>Delete</Button>
               </td>
             </tr>
@@ -196,9 +196,9 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
                 required
               />
 
-              <button type="button" onClick={formSubmit}>
+              <Button variant='primary' type="button" onClick={formSubmit}>
                 Update Product
-              </button>
+              </Button>
             </form>
             {showAlert && (
               <div className=" alert text-danger" role="alert">

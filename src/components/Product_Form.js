@@ -115,7 +115,7 @@ const Product_Form = ({ onSubmit, categories }) => {
             <label>Image:</label>
             <input type="file" accept="image/*" onChange={handleImageChange} />
 
-            <button type="submit">Add</button>
+            <Button variant='primary' type="submit">Add</Button>
           </form>
           {SuccessMessage && (
             <p style={{ color: 'green' }}> Product added successfully!</p>
