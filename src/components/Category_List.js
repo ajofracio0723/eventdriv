@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal} from 'react-bootstrap';
 
 const Category_List = ({ categories, onDelete, onUpdate }) => {
   const [showModal, setShowModal] = useState(false);
@@ -34,8 +34,8 @@ const Category_List = ({ categories, onDelete, onUpdate }) => {
   return (
     <div>
       <h2>Category List</h2>
-      <table>
-        <thead>
+      <table class="table">
+      <thead class="table-dark">
           <tr>
             <th>Category</th>
             <th>Action</th>
@@ -46,8 +46,8 @@ const Category_List = ({ categories, onDelete, onUpdate }) => {
             <tr key={category}>
               <td>{category}</td>
               <td>
-                <button onClick={() => handleShowModal(category)}>Edit</button>
-                <button onClick={() => onDelete(category)}>Delete</button>
+                <button onClick={() => handleShowModal(category)}>Edit</button> &nbsp;
+                <Button variant='danger' onClick={() => onDelete(category)}>Delete</Button>
               </td>
             </tr>
           ))}

@@ -9,7 +9,6 @@ import TransactionReport from './components/TransactionReport';
 import Category_List from './components/Category_List';
 import './App.css';
 import { Button } from 'react-bootstrap';
-import Chart from 'chart.js/auto';
 
 const App = () => {
   const [products, setProducts] = useState(() => {
@@ -17,31 +16,32 @@ const App = () => {
     return storedProducts ? JSON.parse(storedProducts) : [];
   });
   const [categories, setCategories] = useState(['Smartphones', 'Laptops', 'Computers', 'Wearables']);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const storedCart = localStorage.getItem('cart');
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
   const [transactions, setTransactions] = useState([]);
   const [activeTab, setActiveTab] = useState('products');
   const [showTransactionReport, setShowTransactionReport] = useState(false);
 
   const handlePaymentCompleted = (completedTransactions) => {
-    // Update the transactions state
     setTransactions([...transactions, ...completedTransactions]);
-
-    // Set the flag indicating payment has been completed
     setShowTransactionReport(true);
   };
 
   useEffect(() => {
-    // Check if payment has been completed and switch to the "reports" tab
     if (showTransactionReport) {
       setActiveTab('reports');
     }
   }, [showTransactionReport]);
 
-
-
   useEffect(() => {
     localStorage.setItem('products', JSON.stringify(products));
   }, [products]);
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   const add_product = (product) => {
     const lastProductId = products.length > 0 ? products[products.length - 1].id : 'GZMGTZ-1000';
@@ -90,11 +90,11 @@ const App = () => {
   };
 
   const handleAddToCart = (productId) => {
-    const productToAdd = products.find(product => product.id === productId);
-    if (productToAdd) {
-      setCart([...cart, productToAdd]);
+    const productToAdd = products.find((product) => product.id === productId);
+    if (productToAdd && productToAdd.stock > 0) {
+      setCart((prevCart) => [...prevCart, productToAdd]);
 
-  const updatedProducts = products.map(product =>
+      const updatedProducts = products.map((product) =>
         product.id === productId ? { ...product, stock: product.stock - 1 } : product
       );
       setProducts(updatedProducts);
@@ -129,7 +129,7 @@ const App = () => {
         )}
         {activeTab === 'products' && (
           <div>
-           <Product_Form onSubmit={add_product} categories={categories} />
+            <Product_Form onSubmit={add_product} categories={categories} />
             <Product_List
               products={products}
               categories={categories}
@@ -147,17 +147,19 @@ const App = () => {
           </div>
         )}
         {activeTab === 'transaction' && (
-        <div>
-          <h2>Transaction Management</h2>
-          <TransactionManagement
+          <div>
+            <h2>Transaction Management</h2>
+            <TransactionManagement
               products={products}
               setProducts={setProducts}
+              cart={cart}
+              setCart={setCart}
               handleAddToCart={handleAddToCart}
               transactions={transactions}
               setTransactions={setTransactions}
               onPaymentCompleted={handlePaymentCompleted}
             />
-        </div>
+          </div>
         )}
 
         {activeTab === 'reports' && (
@@ -165,8 +167,19 @@ const App = () => {
             <h2>Transaction Report</h2>
             <TransactionReport transactions={transactions} products={products} />
           </div>
-)}
-      </div>  
+        )}
+      </div>
+
+      {activeTab !== 'transaction' && cart.length > 0 && (
+        <div className="cart-container">
+          <h2>Shopping Cart</h2>
+          {cart.map((item) => (
+            <div key={item.id}>
+              {item.name} - {item.price}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

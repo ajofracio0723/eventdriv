@@ -3,20 +3,24 @@ import Sales_Chart from './Sales_Chart';
 import Stock_Level_Chart from './Stock_Level_Chart';
 
 const TransactionReport = ({ transactions, products }) => {
-  const [sortByCount, setSortByCount] = useState(false);
+  const [sortByDate, setSortByDate] = useState(true);
 
-  const sortedTransactions = sortByCount
-    ? transactions.slice().sort((a, b) => b.quantity - a.quantity)
-    : transactions;
+  const sortedTransactions = transactions.slice().sort((a, b) => {
+    if (sortByDate) {
+      return new Date(b.date) - new Date(a.date); // Sort by newest date
+    } else {
+      return b.quantity - a.quantity; // Sort by transaction count
+    }
+  });
 
-  const toggleSortByCount = () => {
-    setSortByCount(!sortByCount);
+  const toggleSortByDate = () => {
+    setSortByDate(!sortByDate);
   };
 
   return (
     <div>
-      <button onClick={toggleSortByCount}>
-        {sortByCount ? 'Sort by Date' : 'Sort by Transaction Count'}
+      <button onClick={toggleSortByDate}>
+        {sortByDate ? 'Sort by Transaction Count' : 'Sort by Date'}
       </button>
       {sortedTransactions.length > 0 ? (
         <div style={{ textAlign: 'center' }}>

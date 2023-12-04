@@ -57,4 +57,3 @@ const Category_Form = ({ onSubmit,}) => {
 };
 
 export default Category_Form;
-

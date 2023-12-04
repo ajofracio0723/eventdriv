@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 
 const Product_List = ({ products, categories, onUpdate, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
@@ -139,8 +139,8 @@ const Product_List = ({ products, categories, onUpdate, onDelete }) => {
                 )}
               </td>
               <td>
-                <button onClick={() => handleShowModal(product)}>Edit</button>
-                <button onClick={() => onDelete(product.id)}>Delete</button>
+                <button onClick={() => handleShowModal(product)}>Edit</button> &nbsp;
+                <Button variant='danger' onClick={() => onDelete(product.id)}>Delete</Button>
               </td>
             </tr>
           ))}
