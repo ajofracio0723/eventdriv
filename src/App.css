@@ -26,21 +26,42 @@ h1 {
 }
 
 /* Navigation styles */
-nav {
-  text-align: center;
-  margin-top: 15px;
+.custom-navbar {
+  background-color: #343a40; /* Navbar background color */
+  height: 110px; /* Adjust the height as needed */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 19px; /* Adjust the padding as needed */
+}
+.custom-navbar .navbar-brand {
+  color: #ffffff; /* Navbar brand text color */
+  font-size: 30px; /* Adjust the font size as needed */
+}
+
+.custom-navbar .nav-link {
+  color: #ffffff; /* Navbar link text color */
+  font-size: 19px; /* Adjust the font size as needed */
+}
+
+.custom-navbar .nav-link:hover {
+  color: #f8f9fa; /* Navbar link text color on hover */
+}
+
+.custom-navbar .navbar-toggler-icon {
+  background-color: #ffffff; /* Navbar toggle icon color */
 }
 
 nav a {
   text-decoration: none;
-  color: #34db69;
+  color: #3498db;
   margin: 0 20px;
   font-weight: bold;
   transition: color 0.3s ease-in-out;
 }
 
 nav a:hover {
-  color: #007bff;
+  color: #004a98;
 }
 
 /* Section styles */
@@ -142,3 +163,13 @@ p {
   font-size: 1.2em;
   color: #03130a;
 }
+
+/* Payment options container styles */
+.payment-options-container {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 30px;
+}
+
+
+

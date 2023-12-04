@@ -7,8 +7,9 @@ import Stock_List from './components/Stock_List';
 import TransactionManagement from './components/TransactionManagement';
 import TransactionReport from './components/TransactionReport';
 import Category_List from './components/Category_List';
+import { Button, Navbar, Nav } from 'react-bootstrap';
 import './App.css';
-import { Button } from 'react-bootstrap';
+import Chart from 'chart.js/auto';
 
 const App = () => {
   const [products, setProducts] = useState(() => {
@@ -16,10 +17,7 @@ const App = () => {
     return storedProducts ? JSON.parse(storedProducts) : [];
   });
   const [categories, setCategories] = useState(['Smartphones', 'Laptops', 'Computers', 'Wearables']);
-  const [cart, setCart] = useState(() => {
-    const storedCart = localStorage.getItem('cart');
-    return storedCart ? JSON.parse(storedCart) : [];
-  });
+  const [cart, setCart] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [activeTab, setActiveTab] = useState('products');
   const [showTransactionReport, setShowTransactionReport] = useState(false);
@@ -39,15 +37,10 @@ const App = () => {
     localStorage.setItem('products', JSON.stringify(products));
   }, [products]);
 
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
   const add_product = (product) => {
     const lastProductId = products.length > 0 ? products[products.length - 1].id : 'GZMGTZ-1000';
     const lastProductIdNumber = parseInt(lastProductId.match(/\d+/)[0]);
     const newProductId = `GZMGTZ-${lastProductIdNumber + 1}`;
-
     setProducts([...products, { ...product, id: newProductId }]);
   };
 
@@ -90,11 +83,10 @@ const App = () => {
   };
 
   const handleAddToCart = (productId) => {
-    const productToAdd = products.find((product) => product.id === productId);
-    if (productToAdd && productToAdd.stock > 0) {
-      setCart((prevCart) => [...prevCart, productToAdd]);
-
-      const updatedProducts = products.map((product) =>
+    const productToAdd = products.find(product => product.id === productId);
+    if (productToAdd) {
+      setCart([...cart, productToAdd]);
+      const updatedProducts = products.map(product =>
         product.id === productId ? { ...product, stock: product.stock - 1 } : product
       );
       setProducts(updatedProducts);
@@ -103,17 +95,18 @@ const App = () => {
 
   return (
     <div>
-      <header>
-        <div className="container">
-          <h1>GizmoGlitz</h1>
-          <nav>
-            <Button onClick={() => setActiveTab('products')}>Products</Button>&nbsp;
-            <Button onClick={() => setActiveTab('stocks')}>Stocks</Button> &nbsp;
-            <Button onClick={() => setActiveTab('transaction')}>Transaction</Button>&nbsp;
-            <Button onClick={() => setActiveTab('reports')}>Reports</Button>&nbsp;
-          </nav>
-        </div>
-      </header>
+       <Navbar expand="lg" bg="dark" variant="dark" className="custom-navbar">
+        <Navbar.Brand href="#">GizmoGlitz</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link onClick={() => setActiveTab('products')}>Products</Nav.Link>
+            <Nav.Link onClick={() => setActiveTab('stocks')}>Stocks</Nav.Link>
+            <Nav.Link onClick={() => setActiveTab('transaction')}>Transaction</Nav.Link>
+            <Nav.Link onClick={() => setActiveTab('reports')}>Reports</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
 
       <div className="container">
         {activeTab === 'products' && (
@@ -125,10 +118,6 @@ const App = () => {
               onDelete={delete_category}
               onUpdate={update_category}
             />
-          </div>
-        )}
-        {activeTab === 'products' && (
-          <div>
             <Product_Form onSubmit={add_product} categories={categories} />
             <Product_List
               products={products}
@@ -146,14 +135,13 @@ const App = () => {
             <Stock_List products={products} />
           </div>
         )}
+
         {activeTab === 'transaction' && (
           <div>
             <h2>Transaction Management</h2>
             <TransactionManagement
               products={products}
               setProducts={setProducts}
-              cart={cart}
-              setCart={setCart}
               handleAddToCart={handleAddToCart}
               transactions={transactions}
               setTransactions={setTransactions}
@@ -169,17 +157,6 @@ const App = () => {
           </div>
         )}
       </div>
-
-      {activeTab !== 'transaction' && cart.length > 0 && (
-        <div className="cart-container">
-          <h2>Shopping Cart</h2>
-          {cart.map((item) => (
-            <div key={item.id}>
-              {item.name} - {item.price}
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };

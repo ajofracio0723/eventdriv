@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Sales_Chart from './Sales_Chart';
-import Stock_Level_Chart from './Stock_Level_Chart';
+import SalesChart from './Sales_Chart';  // Assuming you also changed the file name
+import StockLevelChart from './Stock_Level_Chart';  // Assuming you also changed the file name
 
 const TransactionReport = ({ transactions, products }) => {
   const [sortByDate, setSortByDate] = useState(true);
@@ -50,10 +50,15 @@ const TransactionReport = ({ transactions, products }) => {
       ) : (
         <p>No transactions to display.</p>
       )}
-      <br /><br />
-      <Sales_Chart transactions={sortedTransactions} />
-      <br />
-      <Stock_Level_Chart products={products} />
+
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ width: '48%' }}>
+          <SalesChart transactions={sortedTransactions} />
+        </div>
+        <div style={{ width: '48%' }}>
+          <StockLevelChart products={products} />
+        </div>
+      </div>
     </div>
   );
 };

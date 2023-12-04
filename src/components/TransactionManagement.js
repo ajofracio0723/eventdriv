@@ -138,10 +138,10 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
     if (paymentType === 'Cash on Delivery') {
       setShowCashOnDeliveryModal(true);
     } else {
-      // Optionally, you can add logic to handle other payment methods here
       setShowCashOnDeliveryModal(false);
     }
   };
+
   const handleCashOnDeliverySubmit = (e) => {
     e.preventDefault();
     if (
@@ -225,7 +225,6 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
       contactNumber: '',
     });
 
-    // Close the Cash on Delivery modal
     setShowCashOnDeliveryModal(false);
   };
 
@@ -307,8 +306,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
       <div>
         <div>
           {PaymentOptions && selectedTab === "cart" && (
-            <div>
-              <h3>Payment Options</h3>
+            <div className="payment-options-container">
               <h4>Product Transaction (Point of Sale)</h4>
               <p>Total: ₱{total.toLocaleString()}</p>
               <div>
@@ -338,8 +336,8 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                 onChange={(e) =>
                   setCashOnDeliveryDetails({ ...cashOnDeliveryDetails, fullName: e.target.value })
                 }
-                disabled={!CashOnDeliverySelected}
-              />
+                disabled={!CashOnDeliverySelected} 
+              />&nbsp;
               <input
                 type="text"
                 placeholder="Complete Address"
@@ -351,7 +349,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                   })
                 }
                 disabled={!CashOnDeliverySelected}
-              />
+              />&nbsp;
               <input
                 type="number"
                 placeholder="Contact Number"
@@ -363,7 +361,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
                   })
                 }
                 disabled={!CashOnDeliverySelected}
-              />
+              />&nbsp;
               <Button variant="success" type="submit">
                 Submit
               </Button>
