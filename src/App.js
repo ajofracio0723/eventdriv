@@ -112,19 +112,21 @@ const App = () => {
         {activeTab === 'products' && (
           <div>
             <h2>Product Management</h2>
-            <Category_Form onSubmit={add_category} />
             <Category_List
               categories={categories}
               onDelete={delete_category}
               onUpdate={update_category}
             />
-            <Product_Form onSubmit={add_product} categories={categories} />
+             <Category_Form onSubmit={add_category} />
+          
+            
             <Product_List
               products={products}
               categories={categories}
               onUpdate={edit_product}
               onDelete={delete_product}
             />
+            <Product_Form onSubmit={add_product} categories={categories} />
           </div>
         )}
 

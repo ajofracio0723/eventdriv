@@ -19,7 +19,17 @@
     };
 
     return (
+
+      
       <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ width: '48%' }}>
+            <SalesChart transactions={sortedTransactions} />
+          </div>
+          <div style={{ width: '48%' }}>
+            <StockLevelChart products={products} />
+          </div>
+        </div>
         <Button variant='info' onClick={toggleSortByDate}>
           {sortByDate ? 'Sort by Transaction Count' : 'Sort by Date'}
         </Button> 
@@ -53,14 +63,7 @@
           <p>No transactions to display.</p>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ width: '48%' }}>
-            <SalesChart transactions={sortedTransactions} />
-          </div>
-          <div style={{ width: '48%' }}>
-            <StockLevelChart products={products} />
-          </div>
-        </div>
+        
       </div>
     );
   };

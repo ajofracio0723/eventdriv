@@ -46,7 +46,7 @@ const Category_List = ({ categories, onDelete, onUpdate }) => {
             <tr key={category}>
               <td>{category}</td>
               <td>
-                <Button variant='primary' onClick={() => handleShowModal(category)}>Edit</Button> &nbsp;
+                <Button onClick={() => handleShowModal(category)}>Edit</Button> &nbsp;
                 <Button variant='danger' onClick={() => onDelete(category)}>Delete</Button>
               </td>
             </tr>
@@ -68,7 +68,7 @@ const Category_List = ({ categories, onDelete, onUpdate }) => {
                 onChange={(e) => setNewCategoryName(e.target.value)}
                 required
               />&nbsp;
-              <Button variant='primary' type="submit">Update Category</Button>
+              <button type="submit">Update Category</button>
             
             </form>
           </Modal.Body>
