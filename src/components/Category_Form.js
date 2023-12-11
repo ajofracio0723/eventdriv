@@ -32,7 +32,7 @@ const Category_Form = ({ onSubmit,}) => {
 
   return (
     <>
-      <Button onClick={handleShowModal}>Add Category</Button>
+      <Button onClick={handleShowModal}>Add Category +</Button>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Category </Modal.Title>

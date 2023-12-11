@@ -118,7 +118,8 @@ const App = () => {
               onUpdate={update_category}
             />
              <Category_Form onSubmit={add_category} />
-          
+            &nbsp;  &nbsp;
+             <Product_Form onSubmit={add_product} categories={categories} />
             
             <Product_List
               products={products}
@@ -126,7 +127,6 @@ const App = () => {
               onUpdate={edit_product}
               onDelete={delete_product}
             />
-            <Product_Form onSubmit={add_product} categories={categories} />
           </div>
         )}
 

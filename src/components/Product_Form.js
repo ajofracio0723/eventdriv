@@ -60,7 +60,7 @@ const Product_Form = ({ onSubmit, categories }) => {
   return (
     <>
       <Button class="mt-4 btn btn-primary " onClick={handleShowModal}>
-        Add +
+        Add Product +
       </Button>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>

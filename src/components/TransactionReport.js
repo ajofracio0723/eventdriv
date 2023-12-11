@@ -20,7 +20,6 @@
 
     return (
 
-      
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div style={{ width: '48%' }}>

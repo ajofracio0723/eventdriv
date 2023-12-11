@@ -33,7 +33,7 @@ const PaymentOptionsContainer = ({ children }) => (
   </div>
 );
 
-const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted }) => {
+const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted}) => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [transactions, setTransactions] = useState([]);
@@ -55,6 +55,13 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
 
   const availableProducts = products.filter((product) => product.stock > 0);
 
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+  }, []);
+
   const addToCart = (productId) => {
     const productToAdd = products.find((product) => product.id === productId);
     if (productToAdd && productToAdd.stock > 0) {
@@ -67,6 +74,8 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
             : item
         );
         setCart(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        
       } else {
         const updatedCart = [
           ...cart,
@@ -77,6 +86,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
           },
         ];
         setCart(updatedCart);
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
       }
 
       updateProductQuantity(productId, 1);
@@ -95,6 +105,7 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
     if (removedProduct) {
       updateProductQuantity(removedProduct.id, -removedProduct.quantity);
     }
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
   const updateTotal = (updatedCart) => {
@@ -222,7 +233,10 @@ const TransactionManagement = ({ products = [], setProducts, onPaymentCompleted 
     if (CashOnDeliverySelected && !cashOnDeliveryDetails.contactNumber.trim()) {
       alert('Please provide your contact number for Cash on Delivery.');
       return;
+      
     }
+    localStorage.removeItem('cart');
+    
   
     const updatedTransactions = cart.map((item) => ({
       name: item.name,

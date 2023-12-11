@@ -1,0 +1,39 @@
+
+body {
+    font-family: 'Arial, sans-serif';
+    color: #333;
+  }
+  
+  /* Header Styles */
+  #printContent h2 {
+    text-align: center;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+  }
+  
+  /* Total Styles */
+  #printContent p {
+    text-align: center;
+  }
+  
+  /* Itemized List Styles */
+  #printContent h3 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+  }
+  
+  #printContent table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+  }
+  
+  #printContent th,
+  #printContent td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  /* Add more styles as needed */
+  
